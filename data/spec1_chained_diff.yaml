@@ -1,0 +1,104 @@
+openapi: 3.0.0
+info:
+  title: Security Requirement Example
+  version: 1.0.0
+paths:
+  /api/atlas/v1.0/subscribe:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ParentSubscription'
+          description: OK
+components:
+  schemas:
+    ChildSubscription1:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ParentSubscription'
+      - type: object
+        properties:
+          audienceClaim:
+            type: array
+            description: Identifier of the intended recipient of the token.
+            items:
+              type: string
+          clientId:
+            type: string
+            description: Client identifier that is assigned to an application by the
+              Identity Provider.
+          groupsClaim:
+            type: string
+            description: Identifier of the claim which contains IdP Group IDs in the
+              token.
+          requestedScopes:
+            type: array
+            description: "The description of an IdP, configured by customers."
+            items:
+              type: string
+          userClaim:
+            type: string
+            description: Identifier of the claim which contains the user ID in the
+              token.
+      required:
+      - id
+    ChildSubscription2:
+      type: object
+      properties:
+        acsUrl:
+          type: string
+          description: URL that points to where to send the SAML response.
+        audienceUri:
+          type: string
+          description: Unique string that identifies the intended audience of the
+            SAML assertion.
+        description:
+          type: string
+          description: The description of the identity provider.
+        displayName:
+          type: string
+          description: Human-readable label that identifies the identity provider.
+        id:
+          type: string
+          description: Unique 24-hexadecimal digit string that identifies the identity
+            provider.
+          example: 32b6e34b3d91647abb20e7b8
+          maxLength: 24
+          minLength: 24
+          pattern: "^([a-f0-9]{24})$"
+          readOnly: true
+      required:
+      - id
+    ParentSubscription:
+      type: object
+      discriminator:
+        mapping:
+          Type1: '#/components/schemas/ChildSubscription1'
+          Type2: '#/components/schemas/ChildSubscription2'
+        propertyName: protocol
+        oneOf:
+        - $ref: '#/components/schemas/ChildSubscription2'
+        - $ref: '#/components/schemas/ChildSubscription1'
+        properties:
+          description:
+            type: string
+            description: The description of the identity provider.
+          displayName:
+            type: string
+            description: Human-readable label that identifies the identity provider.
+          id:
+            type: string
+            description: Unique 24-hexadecimal digit string that identifies the identity
+              provider.
+            example: 32b6e34b3d91647abb20e7b8
+            maxLength: 24
+            minLength: 24
+            pattern: "^([a-f0-9]{24})$"
+            readOnly: true
+      required:
+      - id
+
