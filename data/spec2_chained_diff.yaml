@@ -49,88 +49,49 @@ components:
       - oktaIdpId
     FederationSamlIdentityProvider:
       type: object
-      properties:
-        acsUrl:
-          type: string
-          description: URL that points to where to send the SAML response.
-        associatedDomains:
-          type: array
-          description: List that contains the domains associated with the identity
-            provider.
-          items:
+      allOf:
+      - $ref: '#/components/schemas/FederationIdentityProvider'
+      - type: object
+        properties:
+          acsUrl:
             type: string
-          uniqueItems: true
-        associatedOrgs:
-          type: array
-          description: List that contains the connected organization configurations
-            associated with the identity provider.
-          items:
-            $ref: '#/components/schemas/ConnectedOrgConfig'
-          uniqueItems: true
-        audienceUri:
-          type: string
-          description: Unique string that identifies the intended audience of the
-            SAML assertion.
-        description:
-          type: string
-          description: The description of the identity provider.
-        displayName:
-          type: string
-          description: Human-readable label that identifies the identity provider.
-        id:
-          type: string
-          description: Unique 24-hexadecimal digit string that identifies the identity
-            provider.
-          example: 32b6e34b3d91647abb20e7b8
-          maxLength: 24
-          minLength: 24
-          pattern: "^([a-f0-9]{24})$"
-          readOnly: true
-        issuerUri:
-          type: string
-          description: Unique string that identifies the issuer of the SAML Assertion.
-        oktaIdpId:
-          type: string
-          description: Unique 20-hexadecimal digit string that identifies the identity
-            provider.
-          maxLength: 20
-          minLength: 20
-          pattern: "^([a-f0-9]{20})$"
-        pemFileInfo:
-          $ref: '#/components/schemas/PemFileInfo'
-        protocol:
-          type: string
-          description: The protocol of the identity provider.
-        requestBinding:
-          type: string
-          description: SAML Authentication Request Protocol HTTP method binding (POST
-            or REDIRECT) that Federated Authentication uses to send the authentication
-            request.
-          enum:
-          - HTTP-POST
-          - HTTP-REDIRECT
-        responseSignatureAlgorithm:
-          type: string
-          description: Signature algorithm that Federated Authentication uses to encrypt
-            the identity provider signature.
-          enum:
-          - SHA-1
-          - SHA-256
-        ssoDebugEnabled:
-          type: boolean
-          description: Flag that indicates whether the identity provider has SSO debug
-            enabled.
-        ssoUrl:
-          type: string
-          description: URL that points to the receiver of the SAML authentication
-            request.
-        status:
-          type: string
-          description: String enum that indicates whether the identity provider is
-            active.
-          enum:
-          - ACTIVE
-          - INACTIVE
+            description: URL that points to where to send the SAML response.
+          audienceUri:
+            type: string
+            description: Unique string that identifies the intended audience of the
+              SAML assertion.
+          pemFileInfo:
+            $ref: '#/components/schemas/PemFileInfo'
+          requestBinding:
+            type: string
+            description: SAML Authentication Request Protocol HTTP method binding
+              (POST or REDIRECT) that Federated Authentication uses to send the authentication
+              request.
+            enum:
+            - HTTP-POST
+            - HTTP-REDIRECT
+          responseSignatureAlgorithm:
+            type: string
+            description: Signature algorithm that Federated Authentication uses to
+              encrypt the identity provider signature.
+            enum:
+            - SHA-1
+            - SHA-256
+          ssoDebugEnabled:
+            type: boolean
+            description: Flag that indicates whether the identity provider has SSO
+              debug enabled.
+          ssoUrl:
+            type: string
+            description: URL that points to the receiver of the SAML authentication
+              request.
+          status:
+            type: string
+            description: String enum that indicates whether the identity provider
+              is active.
+            enum:
+            - ACTIVE
+            - INACTIVE
       required:
       - id
       - oktaIdpId
